@@ -1,0 +1,45 @@
+---
+import "@fontsource/inter";
+import "@/styles/global.css";
+
+import Head from '@/components/Head.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { SITE } from '@/consts';
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en" data-theme="dark">
+	<head>
+		<Head title={title || SITE.TITLE } description={description || SITE.DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+    <main>
+    	<slot />
+    </main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+html {
+	background-color: var(--crust);
+	color: var(--text);
+}
+body {
+	margin: 0 auto;
+	max-width: 58em;
+}
+@media (max-width: 1024px) {
+	body {
+		margin: 0 8px;
+	}
+}
+</style>
