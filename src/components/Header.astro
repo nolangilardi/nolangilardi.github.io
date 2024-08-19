@@ -1,0 +1,86 @@
+---
+import { SITE } from '@/consts';
+---
+
+<header>
+	<nav>
+		<div class="left">
+			<h2 class="title"><a href="/">{SITE.TITLE}</a></h2>
+			<span class="description">{SITE.DESCRIPTION}</span>
+		</div>
+		<div class="right">
+			<button id="toggle-theme">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-moon"><path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/></svg>
+			</button>
+		</div>
+	</nav>
+</header>
+
+<script is:inline>
+window.onload = () => {
+	const rootThemeHolder = document.querySelector("[data-theme]");
+	const theme = localStorage.getItem("theme")
+	if (theme === "dark" || theme === "light") {
+		rootThemeHolder.setAttribute("data-theme", theme);
+	}
+}
+</script>
+
+<script>
+const button = document.querySelector("#toggle-theme");
+const rootThemeHolder = document.querySelector("[data-theme]")
+
+button?.addEventListener("click", (e) => {
+	e.preventDefault();
+
+	if (!rootThemeHolder) {
+		return;
+	}
+
+	const currentTheme = rootThemeHolder.getAttribute("data-theme");
+	const nextTheme = currentTheme === "light" ? "dark" : "light";
+	localStorage.setItem("theme", nextTheme);
+	rootThemeHolder.setAttribute("data-theme", nextTheme);
+})
+</script>
+
+<style>
+header {
+	margin-bottom: 16px;
+}
+
+nav {
+	display: flex;
+	flex-direction: row;
+	align-items: start;
+	justify-content: space-between;
+}
+
+#toggle-theme {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: var(--fg);
+}
+
+.description {
+	color: var(--fg4);
+	font-size: 14px;
+	font-style: italic;
+}
+
+.title > a {
+	text-decoration: none;
+}
+
+.left {
+	display: flex;
+	flex-direction: column;
+}
+
+.right {
+	display: block;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+</style>

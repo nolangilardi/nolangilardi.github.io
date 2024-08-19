@@ -1,0 +1,76 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import FormattedDate from '@/components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<PageLayout title={post.data.title} description={post.data.description}>
+	<h1 class="scratch-title">{post.data.title}</h1>
+	<div class="tags">
+		{
+			post.data.tags?.map((tag) => {
+				return (<span>#{tag}</span>);
+			})
+		}
+	</div>
+	<span class="publish-date"><FormattedDate date={post.data.pubDate} /></span>
+	<Content />
+</PageLayout>
+<style>
+.scratch-title {
+	color: var(--flamingo);
+}
+.publish-date {
+	font-size: small;
+}
+.tags {
+	font-size: small;
+	color: var(--subtext1);
+}
+.tags > span {
+	margin: auto 2px;
+}
+.tags > span:first-child {
+	margin-left: 0;
+}
+.tags > span:last-child {
+	margin-right: 0;
+}
+pre {
+	padding: 8px;
+	border-radius: 4px;
+}
+blockquote {
+	background-color: var(--surface0);
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 64px;
+  border-left:8px solid var(--green);
+}
+blockquote > p {
+	margin-block-end: revert;
+}
+kbd {
+	background-color: var(--flamingo);
+	color: var(--crust);
+	padding: 2px 5px;
+	border-radius: 0.25rem;
+	border: 1px solid var(--flamingo);
+}
+mark {
+	background-color: var(--yellow);
+	padding: 0 2px;
+}
+</style>

@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import FormattedDate from '@/components/FormattedDate.astro';
+
+import { SITE } from '@/consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<PageLayout title={SITE.TITLE} description={SITE.DESCRIPTION}>
+	<sction class="hero">
+		I wrote about computing related topics, focusing on system programming and cyber security.
+	</sction>
+	<div class="section-title">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>
+		<h2>Latest Scratch</h2>
+	</div>
+	<section>
+		{
+			posts.map((post) => (
+			<a href={`/blog/${post.slug}/`}>
+				<div class="blog-card">
+					<div class="publish-date">
+						<FormattedDate date={post.data.pubDate} />
+					</div>
+					<div class="detail">
+						<h4 class="title">{post.data.title}</h4>
+						<span class="description">{post.data.description}</span>
+					</div>
+				</div>
+			</a>
+			))
+		}
+		<a href={`/blog/`}>
+			<div class="more">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-arrow-out-up-right"><path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/><path d="m21 3-9 9"/><path d="M15 3h6v6"/></svg>
+				<span>Browse all scratchs</span>
+			</div>
+		</a>
+	</section>
+</PageLayout>
+<style>
+section {
+	margin: 8px 0;
+	padding: 8px;
+}
+
+a {
+	display: block;
+	text-decoration: none;
+	margin: 4px 0;
+}
+
+a:hover {
+	text-decoration: underline dotted;
+}
+
+.more {
+	display: flex;
+	color: var(--blue);
+	margin-left: 92px;
+	gap: 8px;
+}
+
+.title {
+	margin-block-start: 4px;
+	margin-block-end: 0;
+	font-size: 1.5rem;
+	color: var(--flamingo);
+}
+
+.description {
+	display: block;
+	font-size: 1rem;
+}
+
+.publish-date {
+	margin-top: 8px;
+	margin-right: 16px;
+	border-radius: 8px;
+	width: 80px;
+	height: 17px;
+	font-size: 10px;
+	padding: 1px 4px;
+	background-color: var(--maroon);
+	color: var(--base);
+	text-align: center;
+}
+ 
+.blog-card {
+	padding: 4px 0px;
+	display: flex;
+	flex-direction: row;
+}
+
+section a:first-child {
+	margin-top: 0;
+}
+
+section a:last-child {
+	margin-top: 16px;
+	margin-bottom: 0;
+}
+
+.hero {
+	border: 2px solid var(--overlay0);
+	background-color: var(--surface0);
+	width: 100%;
+	display: block;
+	padding: 8px 8px 8px 8px;
+}
+
+.section-title {
+	display: flex;
+	flex-direction: row;
+	gap: 4px;
+	margin-top: 32px;
+	margin-bottom: 16px;
+}
+
+.section-title > h2 {
+	margin-block-start: 0;
+}
+
+@media (max-width: 1024px) {
+	.blog-card {
+		flex-direction: column;
+	}
+}
+</style>
